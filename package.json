@@ -1,0 +1,19 @@
+{
+  "name": "vault",
+  "version": "0.1.0",
+  "description": "Vault - Secure Password Manager by 1LOK",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": ["password-manager", "security", "encryption"],
+  "author": "1LOK",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1",
+    "crypto-js": "^4.2.0"
+  }
+}
