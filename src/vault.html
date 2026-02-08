@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vault - My Vault</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="vault-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="../assets/icon.png" alt="Vault">
+        <h2>Vault</h2>
+      </div>
+
+      <ul class="category-list">
+        <li class="category-item active" data-category="all">
+          <span class="category-icon">📁</span>
+          <span>All Items</span>
+        </li>
+        <li class="category-item" data-category="banking">
+          <span class="category-icon">🏦</span>
+          <span>Banking</span>
+        </li>
+        <li class="category-item" data-category="email">
+          <span class="category-icon">📧</span>
+          <span>Email</span>
+        </li>
+        <li class="category-item" data-category="social">
+          <span class="category-icon">🌐</span>
+          <span>Social Media</span>
+        </li>
+        <li class="category-item" data-category="gaming">
+          <span class="category-icon">🎮</span>
+          <span>Gaming</span>
+        </li>
+        <li class="category-item" data-category="work">
+          <span class="category-icon">💼</span>
+          <span>Work</span>
+        </li>
+        <li class="category-item" data-category="other">
+          <span class="category-icon">📌</span>
+          <span>Other</span>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="🔍 Search passwords...">
+        </div>
+        <div class="top-bar-actions">
+          <button class="icon-button" id="addPasswordBtn" title="Add Password">➕</button>
+          <button class="icon-button" id="settingsBtn" title="Settings">⚙️</button>
+          <button class="icon-button" id="logoutBtn" title="Logout">🚪</button>
+        </div>
+      </div>
+
+      <!-- Password Cards Container -->
+      <div class="cards-container">
+        <div class="cards-grid" id="cardsGrid">
+          <!-- Password cards will be dynamically inserted here -->
+        </div>
+      </div>
+    </main>
+
+    <!-- Edit Panel (1/3 right side) -->
+    <div class="edit-panel" id="editPanel">
+      <div class="edit-panel-header">
+        <h2 id="panelTitle">Add Password</h2>
+        <button class="close-panel" id="closePanel">✕</button>
+      </div>
+
+      <form id="passwordForm">
+        <div class="form-field">
+          <label for="websiteName">Website/App Name</label>
+          <input type="text" id="websiteName" placeholder="e.g., Facebook" required>
+        </div>
+
+        <div class="form-field">
+          <label for="websiteUrl">URL (optional)</label>
+          <input type="text" id="websiteUrl" placeholder="https://example.com">
+        </div>
+
+        <div class="form-field">
+          <label for="username">Username/Email</label>
+          <input type="text" id="username" placeholder="user@example.com" required>
+        </div>
+
+        <div class="form-field">
+          <label for="passwordField">Password</label>
+          <div class="password-input-group">
+            <input type="password" id="passwordField" placeholder="Password" required>
+            <button type="button" class="generate-btn" id="generateBtn" title="Generate Password">🎲</button>
+          </div>
+          <div class="strength-indicator">
+            <div class="strength-bar" id="strengthBar"></div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="other">Other</option>
+            <option value="banking">Banking</option>
+            <option value="email">Email</option>
+            <option value="social">Social Media</option>
+            <option value="gaming">Gaming</option>
+            <option value="work">Work</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="notes">Notes (optional)</label>
+          <textarea id="notes" placeholder="Additional information..."></textarea>
+        </div>
+
+        <div class="panel-actions">
+          <button type="button" class="gradient-border" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="saveBtn">Save</button>
+        </div>
+      </form>
+
+      <!-- Delete button (only shown when editing) -->
+      <button type="button" class="gradient-border" id="deleteBtn" style="width: 100%; margin-top: 20px; display: none; color: #ef4444;">
+        🗑️ Delete Password
+      </button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal fade-in">
+      <h2>Settings</h2>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <h3>Theme</h3>
+          <p>Switch between light and dark mode</p>
+        </div>
+        <div class="toggle-switch" id="themeToggle">
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <h3>Change Master Password</h3>
+          <p>Update your vault encryption password</p>
+        </div>
+        <button class="gradient-border" id="changeMasterPasswordBtn">Change</button>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-label">
+          <h3>Account</h3>
+          <p id="accountEmail">Loading...</p>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="closeSettings" style="width: 100%; margin-top: 30px;">Close</button>
+    </div>
+  </div>
+
+  <script type="module" src="vault.js"></script>
+</body>
+</html>

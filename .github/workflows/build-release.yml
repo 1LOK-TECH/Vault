@@ -1,0 +1,113 @@
+name: Build Vault
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers on version tags like v0.1.1, v0.2.0, etc.
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Install electron-builder
+        run: npm install -g electron-builder
+      
+      - name: Build Windows
+        if: matrix.os == 'windows-latest'
+        run: electron-builder --win --x64
+      
+      - name: Build macOS
+        if: matrix.os == 'macos-latest'
+        run: electron-builder --mac --x64 --arm64
+      
+      - name: Build Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: electron-builder --linux deb pacman AppImage --x64
+      
+      - name: Upload Windows artifacts
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-builds
+          path: |
+            dist/*.exe
+      
+      - name: Upload macOS artifacts
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-builds
+          path: dist/*.dmg
+      
+      - name: Upload Linux artifacts
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-builds
+          path: |
+            dist/*.deb
+            dist/*.pacman
+            dist/*.AppImage
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-builds
+          path: dist/
+      
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: macos-builds
+          path: dist/
+      
+      - name: Download Linux artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-builds
+          path: dist/
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+          draft: false
+          prerelease: false
+          body: |
+            Vault ${{ github.ref_name }} - Password Manager
+            
+            **Download for your platform:**
+            - Windows: .exe installer
+            - macOS: .dmg (Intel and Apple Silicon)
+            - Linux: .deb (Debian/Ubuntu), .pacman (Arch), .AppImage (Universal)
+            
+            Zero-knowledge encryption. Your data stays private.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
